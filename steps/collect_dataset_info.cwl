@@ -4,7 +4,7 @@ label: Collect dataset info
 
 hints:
   DockerRequirement:
-    dockerPull: hubmap/celldive-scripts:1.0
+    dockerPull: hubmap/celldive-scripts:latest
     dockerOutputDirectory: "/output"
 
 baseCommand: ["python", "/opt/collect_dataset_info.py"]
