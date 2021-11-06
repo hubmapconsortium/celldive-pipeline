@@ -51,8 +51,8 @@ def modify_and_save_img(img_path: Path, out_path: Path):
 
 def copy_files(
     file_type: str,
-    data_dir: Path,
-    dir_name: str,
+    src_data_dir: Path,
+    src_dir_name: str,
     img_name_template: str,
     out_dir: Path,
     out_name_template: str,
@@ -61,10 +61,9 @@ def copy_files(
 ):
     for img_slice_name, slice_path in slices.items():
         img_name = img_name_template.format(region=region, slice_name=img_slice_name)
-        src = data_dir / dir_name / img_name
+        src = src_data_dir / src_dir_name / img_name
         dst = (
             out_dir
-            / dir_name
             / out_name_template.format(region=region, slice_name=img_slice_name)
         )
         if file_type == "mask":
@@ -83,7 +82,6 @@ def collect_segm_masks(
     tasks = []
     for region, slices in listing.items():
         dir_name = dir_name_template.format(region=region)
-        make_dir_if_not_exists(out_dir / dir_name)
         task = dask.delayed(copy_files)(
             "mask",
             data_dir,
@@ -105,7 +103,6 @@ def collect_expr(data_dir: Path, listing: dict, out_dir: Path):
     tasks = []
     for region, slices in listing.items():
         dir_name = dir_name_template.format(region=region)
-        make_dir_if_not_exists(out_dir / dir_name)
         task = dask.delayed(copy_files)(
             "expr",
             data_dir,

@@ -30,25 +30,13 @@ HuBMAP_OME/
 ```
 pipeline_output/
 ├── expr
-│   ├── region_001
-│   │    ├── reg001_S20030077_region_001_expr.ome.tiff
-│   │    ├── reg001_S20030078_region_001_expr.ome.tiff
-│   │    │                  ...
-│   │    └── reg001_S20030105_region_001_expr.ome.tiff
-│   └── region_00N
-│        ├── reg00N_S20030077_region_00N_expr.ome.tiff
-│        ├── reg00N_S20030078_region_00N_expr.ome.tiff
-│        │                  ...
-│        └── reg00N_S20030105_region_00N_expr.ome.tiff       
-└── mask                                              
-    ├── region_001                                    
-    │    ├── reg001_S20030077_region_001_mask.ome.tiff
-    │    ├── reg001_S20030078_region_001_mask.ome.tiff
-    │    │                  ...                   
-    │    └── reg001_S20030105_region_001_mask.ome.tiff
-    └── region_00N                                
-         ├── reg00N_S20030077_region_00N_mask.ome.tiff
-         ├── reg00N_S20030078_region_00N_mask.ome.tiff
-         │                  ...                   
-         └── reg00N_S20030105_region_00N_mask.ome.tiff    
+│   ├── reg001_S20030077_region_001_expr.ome.tiff
+│   ├── reg002_S20030078_region_002_expr.ome.tiff
+│   │                  ...
+│   └── reg00N_S20030105_region_00N_expr.ome.tiff       
+└── mask                                                                                  
+    ├── reg001_S20030077_region_001_mask.ome.tiff
+    ├── reg002_S20030078_region_002_mask.ome.tiff               
+    │                  ...                   
+    └── reg00N_S20030105_region_00N_mask.ome.tiff    
 ```
