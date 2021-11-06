@@ -4,7 +4,7 @@ label: Prepare images for segmentation
 
 hints:
   DockerRequirement:
-    dockerPull: hubmap/celldive-scripts:latest
+    dockerPull: hubmap/celldive-scripts:1.2
     dockerOutputDirectory: "/output"
 
 baseCommand: ["python", "/opt/prepare_segmentation_channels.py"]
