@@ -11,8 +11,8 @@ from utils import (
     path_to_str,
     path_to_str_local,
     save_pipeline_config,
-    strip_namespace,
 )
+from utils_ome import strip_namespace
 
 
 def read_meta(meta_path: Path) -> dict:

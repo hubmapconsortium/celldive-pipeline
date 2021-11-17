@@ -1,5 +1,3 @@
-import xml.etree.ElementTree as ET
-from io import StringIO
 from pathlib import Path
 from typing import Dict
 
@@ -28,14 +26,6 @@ def read_pipeline_config(config_path: Path):
 def save_pipeline_config(config: dict, out_path: Path):
     with open(out_path, "w") as s:
         yaml.safe_dump(config, s)
-
-
-def strip_namespace(xmlstr: str):
-    it = ET.iterparse(StringIO(xmlstr))
-    for _, el in it:
-        _, _, el.tag = el.tag.rpartition("}")
-    root = it.root
-    return root
 
 
 def get_channel_names_from_ome(xml) -> Dict[str, int]:
