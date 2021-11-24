@@ -4,7 +4,7 @@ label: Collect segmentation masks and images for the final output
 
 hints:
   DockerRequirement:
-    dockerPull: hubmap/celldive-scripts:latest
+    dockerPull: hubmap/celldive-scripts:1.3.2
     dockerOutputDirectory: "/output"
 
 baseCommand: ["python", "/opt/collect_output.py"]
