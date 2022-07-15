@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Tuple, Union
 
 import tifffile as tif
 import yaml
@@ -31,16 +31,33 @@ def convert_all_paths_to_str(listing: dict) -> Dict[int, Dict[str, str]]:
 
 
 def get_segm_channel_ids_from_ome(
-    path: Path, segm_ch_names: Dict[str, str]
-) -> Dict[str, int]:
+    path: Path,
+    segm_ch_names: Dict[str, Union[str, List[str]]],
+) -> Tuple[Dict[str, int], Dict[str, str]]:
+    """
+    Returns a 2-tuple:
+     [0] Mapping from segmentation channel names to 0-based indexes into channel list
+     [1] Adjustment of segm_ch_names listing the first segmentation channel found
+    """
     with tif.TiffFile(path_to_str(path)) as TF:
         ome_meta = TF.ome_metadata
     ome_xml = strip_namespace(ome_meta)
     ch_names_ids = get_channel_names_from_ome(ome_xml)
-    segm_ch_names_ids = dict()
-    for ch_type, name in segm_ch_names.items():
-        segm_ch_names_ids[name] = ch_names_ids[name]
-    return segm_ch_names_ids
+    segm_ch_names_ids: Dict[str, int] = dict()
+    adj_segm_ch_names: Dict[str, str] = dict()
+    for ch_type, name_or_names in segm_ch_names.items():
+        if isinstance(name_or_names, str):
+            name_or_names = [name_or_names]
+        for name in name_or_names:
+            try:
+                segm_ch_names_ids[name] = ch_names_ids[name]
+                adj_segm_ch_names[ch_type] = name
+                break
+            except KeyError:
+                pass
+        else:
+            raise KeyError(f"any of {name_or_names}")
+    return segm_ch_names_ids, adj_segm_ch_names
 
 
 def get_first_img_path(data_dir: Path, listing: Dict[int, Dict[str, Path]]) -> Path:
@@ -63,14 +80,14 @@ def main(data_dir: Path, meta_path: Path):
     make_dir_if_not_exists(out_dir)
 
     first_img_path = data_dir / get_first_img_path(data_dir, listing)
-    segm_ch_names_ids = get_segm_channel_ids_from_ome(
+    segm_ch_names_ids, adj_segmentation_channels = get_segm_channel_ids_from_ome(
         first_img_path, segmentation_channels
     )
 
     listing_str = convert_all_paths_to_str(listing)
 
     pipeline_config = dict()
-    pipeline_config["segmentation_channels"] = segmentation_channels
+    pipeline_config["segmentation_channels"] = adj_segmentation_channels
     pipeline_config["dataset_map_all_slices"] = listing_str
     pipeline_config["segmentation_channel_ids"] = segm_ch_names_ids
 

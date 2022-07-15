@@ -1,3 +1,5 @@
 segmentation_channels:
-  nucleus: DAPI_INIT
+  nucleus:
+    - DAPI_INIT
+    - DAPI
   cell: PCAD
