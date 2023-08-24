@@ -55,8 +55,7 @@ def get_segm_channel_ids_from_ome(
                 break
             except KeyError:
                 pass
-        else:
-            raise KeyError(f"any of {name_or_names}")
+        #@TODO: Add check for not finding adequate segmentation channels
     return segm_ch_names_ids, adj_segm_ch_names
 
 

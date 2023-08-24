@@ -1,0 +1,5 @@
+FROM hubmap/celldive-scripts
+
+COPY bin /opt
+
+CMD ["/bin/bash"]

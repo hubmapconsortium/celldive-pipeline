@@ -20,10 +20,10 @@ RUN mkdir /output && chmod -R a+rwx /output
 
 # update base environment from yaml file
 COPY environment.yml /tmp/
-RUN conda env update -f /tmp/environment.yml \
-    && echo "source activate base" > ~/.bashrc \
-    && conda clean --index-cache --tarballs --yes \
-    && rm /tmp/environment.yml
+RUN conda env update -f /tmp/environment.yml
+RUN echo "source activate base" > ~/.bashrc
+RUN conda clean --index-cache --tarballs --yes
+RUN rm /tmp/environment.yml
 
 COPY bin /opt
 
