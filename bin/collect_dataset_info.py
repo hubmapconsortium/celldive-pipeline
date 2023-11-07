@@ -1,4 +1,5 @@
 import argparse
+from fnmatch import fnmatch
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
@@ -43,18 +44,17 @@ def get_segm_channel_ids_from_ome(
         ome_meta = TF.ome_metadata
     ome_xml = strip_namespace(ome_meta)
     ch_names_ids = get_channel_names_from_ome(ome_xml)
-    segm_ch_names_ids: Dict[str, int] = dict()
-    adj_segm_ch_names: Dict[str, str] = dict()
+    segm_ch_names_ids: Dict[str, int] = {}
+    adj_segm_ch_names: Dict[str, str] = {}
     for ch_type, name_or_names in segm_ch_names.items():
         if isinstance(name_or_names, str):
             name_or_names = [name_or_names]
-        for name in name_or_names:
-            try:
-                segm_ch_names_ids[name] = ch_names_ids[name]
-                adj_segm_ch_names[ch_type] = name
-                break
-            except KeyError:
-                pass
+        for name_to_search in name_or_names:
+            for ch_name, ch_id in ch_names_ids:
+                if fnmatch(ch_name, name_to_search):
+                    segm_ch_names_ids[ch_name] = ch_id
+                    adj_segm_ch_names[ch_type] = ch_name
+                    break
         else:
             raise KeyError(f"any of {name_or_names}")
     return segm_ch_names_ids, adj_segm_ch_names
