@@ -2,6 +2,7 @@ segmentation_channels:
   nucleus:
     - DAPI_INIT
     - DAPI
+    - DAPI*
   cell:
     - PCAD
     - NaKATPase
