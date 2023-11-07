@@ -58,6 +58,7 @@ dependencies:
   - pandas=1.2.4=py38h2531618_0
   - partd=1.2.0=pyhd3eb1b0_0
   - pillow=8.2.0=py38he98fc37_0
+  - pint
   - pip=21.1.1=py38h06a4308_0
   - psutil=5.8.0=py38h27cfd23_1
   - pyparsing=2.4.7=pyhd3eb1b0_0
