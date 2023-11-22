@@ -47,16 +47,19 @@ def get_segm_channel_ids_from_ome(
     segm_ch_names_ids: Dict[str, int] = {}
     adj_segm_ch_names: Dict[str, str] = {}
     for ch_type, name_or_names in segm_ch_names.items():
+        found = False
         if isinstance(name_or_names, str):
             name_or_names = [name_or_names]
         for name_to_search in name_or_names:
             for ch_name, ch_id in ch_names_ids:
-                if fnmatch(ch_name, name_to_search):
+                print("Checking", ch_name, "against", name_to_search)
+                if found := fnmatch(ch_name, name_to_search):
+                    print("Matched", ch_name, "against", name_to_search)
                     segm_ch_names_ids[ch_name] = ch_id
                     adj_segm_ch_names[ch_type] = ch_name
                     break
-        else:
-            raise KeyError(f"any of {name_or_names}")
+        if not found:
+            raise KeyError(f"Couldn't find channel {ch_type} in any of {name_or_names}")
     return segm_ch_names_ids, adj_segm_ch_names
 
 
