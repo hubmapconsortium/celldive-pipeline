@@ -1,1 +1,1 @@
-hubmap/celldive-scripts	dockerfiles/Dockerfile_celldive-scripts	base_directory_build
+hubmap/mibi-scripts	dockerfiles/Dockerfile_mibi-scripts	base_directory_build

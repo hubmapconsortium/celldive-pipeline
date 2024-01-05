@@ -2,9 +2,9 @@ cwlVersion: v1.1
 class: CommandLineTool
 label: Collect dataset info
 
-hints:
+requirements:
   DockerRequirement:
-    dockerPull: hubmap/celldive-scripts:latest
+    dockerPull: hubmap/mibi-scripts:latest
     dockerOutputDirectory: "/output"
 
 baseCommand: ["python", "/opt/collect_dataset_info.py"]

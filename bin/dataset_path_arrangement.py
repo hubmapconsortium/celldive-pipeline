@@ -8,17 +8,12 @@ def alpha_num_order(string: str) -> str:
     Ex: alpha_num_order("a6b12.125")  ==> "a00006b00012.00125"
     """
     return "".join(
-        [
-            format(int(x), "05d") if x.isdigit() else x
-            for x in re.split(r"(\d+)", string)
-        ]
+        [format(int(x), "05d") if x.isdigit() else x for x in re.split(r"(\d+)", string)]
     )
 
 
 def sort_dict(item: dict) -> dict:
-    return {
-        k: sort_dict(v) if isinstance(v, dict) else v for k, v in sorted(item.items())
-    }
+    return {k: sort_dict(v) if isinstance(v, dict) else v for k, v in sorted(item.items())}
 
 
 def get_img_listing(in_dir: Path) -> List[Path]:
@@ -74,8 +69,6 @@ def create_listing_for_each_region(dataset_dir: Path) -> Dict[int, Dict[str, Pat
     arranged_listing = dict()
     for region, dir_path in region_dict.items():
         this_region_img_listing = get_img_listing(dataset_dir / dir_path)
-        arranged_listing[region] = get_channel_listing(
-            dataset_dir, this_region_img_listing
-        )
+        arranged_listing[region] = get_channel_listing(dataset_dir, this_region_img_listing)
     arranged_listing = sort_dict(arranged_listing)
     return arranged_listing

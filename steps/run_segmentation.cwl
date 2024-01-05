@@ -2,9 +2,9 @@ cwlVersion: v1.1
 class: CommandLineTool
 label: Run segmentation
 
-hints:
+requirements:
   DockerRequirement:
-    dockerPull: hubmap/segmentations:1.2.2
+    dockerPull: hubmap/segmentations:1.2.3
     dockerOutputDirectory: "/output"
   DockerGpuRequirement: {}
   NetworkAccess:
