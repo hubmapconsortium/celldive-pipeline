@@ -2,9 +2,9 @@ cwlVersion: v1.1
 class: CommandLineTool
 label: Prepare images for segmentation
 
-requirements:
+hints:
   DockerRequirement:
-    dockerPull: hubmap/mibi-scripts:latest
+    dockerPull: hubmap/celldive-scripts:latest
     dockerOutputDirectory: "/output"
 
 baseCommand: ["python", "/opt/prepare_segmentation_channels.py"]
