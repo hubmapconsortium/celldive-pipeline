@@ -1,5 +1,8 @@
 segmentation_channels:
   nucleus:
-    - H3
+    - DAPI_INIT
+    - DAPI
   cell:
-    - Ecad
+    - PCAD
+    - NaKATPase
+    - CD3
