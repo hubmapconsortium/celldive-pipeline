@@ -37,7 +37,7 @@ def extract_digits_from_string(string: str) -> List[int]:
 
 
 def extract_channel_name(file_name: str) -> str:
-    return re.sub("(\.ome)?\.ti(ff|f)", "", file_name, flags=re.IGNORECASE)
+    return re.sub(r"(\.ome)?\.ti(ff|f)", "", file_name, flags=re.IGNORECASE)
 
 
 def get_channel_listing(dataset_dir: Path, listing: List[Path]) -> Dict[str, Path]:

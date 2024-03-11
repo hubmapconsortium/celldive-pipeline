@@ -1,7 +1,12 @@
+import html
 import unicodedata
 from io import StringIO
-from typing import Dict
+from typing import Dict, Literal, Optional
 from xml.etree import ElementTree as ET
+
+from pint import Quantity, UnitRegistry
+
+target_physical_size = "nm"
 
 
 def strip_namespace(xmlstr: str):
@@ -46,25 +51,34 @@ def add_sa_segmentation_channels_info(
     omexml.append(structured_annotation)
 
 
-def convert_um_to_nm(px_node: ET.Element):
-    unit_x = px_node.get("PhysicalSizeXUnit", None)
-    unit_y = px_node.get("PhysicalSizeYUnit", None)
-    size_x = px_node.get("PhysicalSizeX", None)
-    size_y = px_node.get("PhysicalSizeY", None)
-    um = unicodedata.normalize("NFKC", "μm")
-    if size_x is None or size_y is None:
-        print("Could not find physical pixel size in OMEXML")
-        return
-    if unit_x is None or unit_y is None:
-        print("Could not find physical unit in OMEXML")
-        return
-    else:
-        if unicodedata.normalize("NFKC", unit_x) == um or unit_x == "&#181;m":
-            px_node.set("PhysicalSizeXUnit", "nm")
-            px_node.set("PhysicalSizeX", str(float(size_x) * 1000))
-        if unicodedata.normalize("NFKC", unit_y) == um or unit_y == "&#181;m":
-            px_node.set("PhysicalSizeYUnit", "nm")
-            px_node.set("PhysicalSizeY", str(float(size_y) * 1000))
+def physical_size_to_quantity(
+    px_node: ET.Element,
+    dimension: Literal["X", "Y"],
+) -> Optional[Quantity]:
+    reg = UnitRegistry()
+
+    unit_str = px_node.get(f"PhysicalSize{dimension}Unit", None)
+    if unit_str is None:
+        print("Could not find physical unit in OMEXML for dimension", dimension)
+        return None
+
+    size_str = px_node.get(f"PhysicalSize{dimension}", None)
+    if size_str is None:
+        print("Could not find physical unit in OMEXML for dimension", dimension)
+        return None
+
+    unit_normalized = unicodedata.normalize(html.unescape(unit_str), "NFKC")
+    size = float(size_str) * reg[unit_normalized]
+    return size
+
+
+def convert_size_to_nm(px_node: ET.Element):
+    for dimension in "XY":
+        size = physical_size_to_quantity(px_node, dimension)
+        if size is not None:
+            size_converted = size.to(target_physical_size)
+            px_node.set(f"PhysicalSize{dimension}Unit", target_physical_size)
+            px_node.set(f"PhysicalSize{dimension}", str(size_converted.magnitude))
 
 
 def remove_tiffdata(px_node: ET.Element):
@@ -98,7 +112,7 @@ def modify_initial_ome_meta(xml_str: str, segmentation_channels: Dict[str, str])
     ome_xml.set("xmlns", "http://www.openmicroscopy.org/Schemas/OME/2016-06")
     px_node = ome_xml.find("Image").find("Pixels")
     px_node.set("DimensionOrder", new_dim_order)
-    convert_um_to_nm(px_node)
+    convert_size_to_nm(px_node)
     remove_tiffdata(px_node)
     generate_and_add_new_tiffdata(px_node)
 
