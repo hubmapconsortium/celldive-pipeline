@@ -51,6 +51,8 @@ def get_segm_channel_ids_from_ome(
         if isinstance(name_or_names, str):
             name_or_names = [name_or_names]
         for name_to_search in name_or_names:
+            if found:
+                break
             for ch_name, ch_id in ch_names_ids:
                 print("Checking", ch_name, "against", name_to_search)
                 if found := fnmatch(ch_name, name_to_search):
