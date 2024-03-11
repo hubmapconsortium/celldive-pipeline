@@ -67,7 +67,7 @@ def physical_size_to_quantity(
         print("Could not find physical unit in OMEXML for dimension", dimension)
         return None
 
-    unit_normalized = unicodedata.normalize(html.unescape(unit_str), "NFKC")
+    unit_normalized = unicodedata.normalize("NFKC", html.unescape(unit_str))
     size = float(size_str) * reg[unit_normalized]
     return size
 
