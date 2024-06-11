@@ -26,7 +26,7 @@ def modify_and_save_img(
         img_stack = TF.series[0].asarray()
     new_img_stack = add_z_axis(img_stack)
     new_ome_meta = modify_initial_ome_meta(ome_meta, segmentation_channels)
-    with tif.TiffWriter(path_to_str(out_path), bigtiff=True) as TW:
+    with tif.TiffWriter(path_to_str(out_path), bigtiff=True, shaped=False) as TW:
         TW.write(
             new_img_stack,
             contiguous=True,
