@@ -5,6 +5,7 @@ from typing import Dict, List
 import dask
 import tifffile as tif
 from utils import (
+    get_img_subdir,
     make_dir_if_not_exists,
     path_to_str,
     path_to_str_local,
@@ -86,6 +87,7 @@ def copy_segm_channels_to_out_dirs(
 
 
 def main(data_dir: Path, pipeline_config_path: Path):
+    data_dir = get_img_subdir(data_dir)
     pipeline_config = read_pipeline_config(pipeline_config_path)
 
     segm_ch_out_dir = Path("/output") / "segmentation_channels"

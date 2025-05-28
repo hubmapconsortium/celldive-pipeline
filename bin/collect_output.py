@@ -6,7 +6,7 @@ from typing import Dict
 import dask
 import numpy as np
 import tifffile as tif
-from utils import make_dir_if_not_exists, path_to_str, read_pipeline_config
+from utils import get_img_subdir, make_dir_if_not_exists, path_to_str, read_pipeline_config
 from utils_ome import modify_initial_ome_meta
 
 Image = np.ndarray
@@ -108,6 +108,7 @@ def collect_expr(
 
 
 def main(data_dir: Path, mask_dir: Path, pipeline_config_path: Path):
+    data_dir = get_image_subdir(data_dir)
     pipeline_config = read_pipeline_config(pipeline_config_path)
     listing = pipeline_config["dataset_map_all_slices"]
     segmentation_channels = pipeline_config["segmentation_channels"]
