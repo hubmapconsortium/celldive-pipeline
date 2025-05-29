@@ -40,10 +40,10 @@ def get_channel_names_from_ome(xml) -> List[Tuple[str, int]]:
     return ch_names_ids
 
 def get_img_subdir(data_dir: Path)-> Path:
-    subdir = data_dir / Path("lab_processed/images/")
-    if subdir.exists():
+    subdir = data_dir / "lab_processed/images/"
+    if subdir.is_dir():
         return subdir
     subdir = data_dir / "HuBMAP_OME/"
-    if subdir.exists():
+    if subdir.is_dir():
         return subdir
-    raise ValidationError(f"Directory {data_dir} does not contain subdirectory lab_processed/images/ or HuBMAP_OME")
+    raise ValidationError(f"Directory {data_dir} does not contain subdirectory lab_processed/images/ or HuBMAP_OME/")
