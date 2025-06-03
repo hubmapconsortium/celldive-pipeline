@@ -1,13 +1,29 @@
 import argparse
 import shutil
 from pathlib import Path
-from typing import Dict
-
+from typing import Dict, Iterable
+from os import walk
+import re
 import dask
 import numpy as np
 import tifffile as tif
 from utils import get_img_subdir, make_dir_if_not_exists, path_to_str, read_pipeline_config
 from utils_ome import modify_initial_ome_meta
+
+ome_tiff_pattern = re.compile(r"(?P<basename>.*)\.ome\.tiff(f?)$")
+
+def find_ome_tiffs(input_dir: Path) -> Iterable[Path]:
+    """
+    Yields 2-tuples:
+     [0] full Path to source file
+     [1] output file Path (source file relative to input_dir)
+    """
+    for dirpath_str, _, filenames in walk(input_dir):
+        dirpath = Path(dirpath_str)
+        for filename in filenames:
+            if ome_tiff_pattern.match(filename):
+                src_filepath = dirpath / filename
+                yield src_filepath
 
 Image = np.ndarray
 
@@ -56,7 +72,11 @@ def copy_files(
             shutil.copy(src, dst)
         elif file_type == "expr":
             segmentation_channels = additional_info
+            ome_tiff_files = find_ome_tiffs(src_data_dir)
+            assert len(list(ome_tiff_files)) == 0
+            src = list(ome_tiff_files)[0]
             modify_and_save_img(src, dst, segmentation_channels)
+
         print("region:", region, "| src:", src, "| dst:", dst)
 
 
