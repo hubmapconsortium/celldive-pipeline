@@ -88,10 +88,13 @@ def collect_expr(
 ):
     out_name_template = "reg{region:03d}_{slice_name}_expr.ome.tiff"
     img_name_template = "{slice_name}.ome.tif"  # one f
-    dir_name_template = "region_{region:03d}"
+    dir_name_template = "region_{region}"
+    dir_name_template_3d = "region_{region:03d}"
+
     tasks = []
     for region, slices in listing.items():
-        dir_name = dir_name_template.format(region=region)
+        dir_name = dir_name_template.format(region=region) if (data_dir /
+                    dir_name_template.format(region=region)).exists() else (dir_name_template_3d.format(region=region))
         task = dask.delayed(copy_files)(
             "expr",
             data_dir,
@@ -108,7 +111,7 @@ def collect_expr(
 
 
 def main(data_dir: Path, mask_dir: Path, pipeline_config_path: Path):
-    data_dir = get_image_subdir(data_dir)
+    data_dir = get_img_subdir(data_dir)
     pipeline_config = read_pipeline_config(pipeline_config_path)
     listing = pipeline_config["dataset_map_all_slices"]
     segmentation_channels = pipeline_config["segmentation_channels"]
