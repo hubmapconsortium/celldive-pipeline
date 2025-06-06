@@ -12,7 +12,7 @@ from utils_ome import modify_initial_ome_meta
 
 ome_tiff_pattern = re.compile(r"(?P<basename>.*)\.ome\.tiff(f?)$")
 
-def find_ome_tiffs(input_dir: Path) -> Iterable[Path]:
+def find_ome_tiff(input_dir: Path) -> Path:
     """
     Yields 2-tuples:
      [0] full Path to source file
@@ -23,7 +23,7 @@ def find_ome_tiffs(input_dir: Path) -> Iterable[Path]:
         for filename in filenames:
             if ome_tiff_pattern.match(filename):
                 src_filepath = dirpath / filename
-                yield src_filepath
+                return src_filepath
 
 Image = np.ndarray
 
@@ -72,9 +72,7 @@ def copy_files(
             shutil.copy(src, dst)
         elif file_type == "expr":
             segmentation_channels = additional_info
-            ome_tiff_files = find_ome_tiffs(src_data_dir)
-            assert len(list(ome_tiff_files)) == 0
-            src = list(ome_tiff_files)[0]
+            src = find_ome_tiff(src_data_dir)
             modify_and_save_img(src, dst, segmentation_channels)
 
         print("region:", region, "| src:", src, "| dst:", dst)
