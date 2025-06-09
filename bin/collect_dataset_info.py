@@ -8,6 +8,7 @@ import yaml
 from dataset_path_arrangement import create_listing_for_each_region
 from utils import (
     get_channel_names_from_ome,
+    get_img_subdir,
     make_dir_if_not_exists,
     path_to_str,
     path_to_str_local,
@@ -72,6 +73,7 @@ def get_first_img_path(data_dir: Path, listing: Dict[int, Dict[str, Path]]) -> P
 
 
 def main(data_dir: Path, meta_path: Path):
+    data_dir = get_img_subdir(data_dir)
     meta = read_meta(meta_path)
     segmentation_channels = meta["segmentation_channels"]
 
