@@ -10,7 +10,7 @@ import tifffile as tif
 from utils import get_img_subdir, make_dir_if_not_exists, path_to_str, read_pipeline_config
 from utils_ome import modify_initial_ome_meta
 
-ome_tiff_pattern = re.compile(r"(?P<basename>.*)\.ome\.tiff(f?)$")
+ome_tiff_pattern = re.compile(r"(?P<basename>.*)\.ome\.tif(f?)$")
 
 def find_ome_tiff(input_dir: Path) -> Path:
     """

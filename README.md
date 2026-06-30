@@ -1,6 +1,9 @@
 ## CellDIVE pipeline
 
-Prepares data and does 2D segmentation of CellDIVE images slice by slice using deepcell method.
+Prepares data and does 2D segmentation of CellDIVE using [deepcell](https://deepcell.readthedocs.io/en/latest/app-gallery/mesmer.html) method.  More information about DeepCell and the associated Mesmer algorithm can be found in the associated publication [here](https://www.nature.com/articles/s41592-019-0580-2).
+
+This method was selected based on its performance in a number of metrics calculated without the use of a human segmented reference image in the process described in [this publication](https://www.molbiolcell.org/doi/full/10.1091/mbc.E22-08-0364)
+
 
 
 ### Usage example
